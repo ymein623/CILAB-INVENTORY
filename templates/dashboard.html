@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>CILAB EQUIPMENT INVENTORY</title>
+    <style>
+        body { background: #0f172a; color: #f8fafc; font-family: sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .main-wrapper { width: 1480px; display: flex; flex-direction: column; gap: 30px; }
+        
+        /* 제목 중앙 정렬 */
+        .title { text-align: center; color: #38bdf8; font-size: 2.5rem; margin-bottom: 10px; font-weight: bold; letter-spacing: 2px; }
+
+        .kanban-container { display: flex; gap: 20px; justify-content: space-between; }
+        .card { background: #1e293b; border-radius: 12px; width: 280px; border: 1px solid #334155; }
+        .card h3 { text-align: center; padding: 15px; margin: 0; background: #334155; border-radius: 12px 12px 0 0; border-bottom: 3px solid #2563eb; font-size: 1rem; }
+        .card-body { padding: 15px; min-height: 450px; }
+
+        .item-card { background: #334155; padding: 15px; margin-bottom: 12px; border-radius: 8px; position: relative; cursor: pointer; border-left: 5px solid #38bdf8; transition: 0.2s; }
+        .del-btn { position: absolute; top: 8px; right: 10px; color: #94a3b8; font-size: 16px; cursor: pointer; z-index: 5; }
+
+        /* 하단 AS 재고 현황 (7개 항목 최적화) */
+        .inventory-section { background: #1e293b; padding: 25px; border-radius: 12px; border: 1px solid #334155; width: 100%; /* 부모 너비에 맞춤 */ box-sizing: border-box; }
+        .inventory-section h4 { margin: 0 0 15px 0; color: #94a3b8; font-size: 0.9rem; }
+        .inventory-bar { display: grid; grid-template-columns: repeat(5, 1fr); /* 한 줄에 5개씩 */ gap: 15px; }
+        .inventory-item { text-align: center; padding: 15px 10px; background: #0f172a; border-radius: 8px; border: 2px solid #334155; /* 바운더리 강조 */ cursor: pointer; transition: 0.2s; }
+        .inventory-item:hover { border-color: #38bdf8; background: #1e293b; }
+        .inventory-item label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; font-weight: bold; }
+        .inventory-item span { font-size: 1.2rem; font-weight: bold; color: #38bdf8; }
+
+        /* 모달 스타일 유지 */
+        .add-btn { position: fixed; right: 40px; bottom: 40px; width: 60px; height: 60px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); align-items: center; justify-content: center; z-index: 2000; }
+        .modal-box { background: #1e293b; padding: 30px; border-radius: 15px; width: 350px; display: flex; flex-direction: column; gap: 15px; }
+        .modal-box input, .modal-box select, .modal-box textarea { background: #0f172a; border: 1px solid #334155; color: white; padding: 12px; border-radius: 8px; }
+        .modal-box button { background: #2563eb; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <h1 class="title">CILAB EQUIPMENT INVENTORY</h1>
+
+        <div class="kanban-container">
+            {% for status in ["제작중", "수리중", "대기중", "제작완료", "출고현황"] %}
+            <div class="card">
+                <h3>{{ status }}</h3>
+                <div class="card-body" id="{{ status }}" ondragover="allowDrop(event)" ondrop="drop(event)">
+                    {% for item in items if item.status == status %}
+                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="{{ item.id }}" onclick="openEditModal('{{ item.id }}', '{{ item.name }}', '{{ item.manager }}', '{{ item.note }}', '{{ item.status }}')">
+                        <span class="del-btn" onclick="deleteItem(event, '{{ item.id }}')">✕</span>
+                        <strong>{{ item.name }}</strong>
+                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 {{ item.manager }}</small>
+                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">{{ item.note }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="inventory-section">
+            <h4>📦 AS 재고 현황 (클릭 시 수량 수정)</h4>
+            <div class="inventory-bar">
+                {% for part in parts %}
+                <div class="inventory-item" onclick="editPart('{{ part.id }}', '{{ part.name }}', '{{ part.quantity }}')">
+                    <label>{{ part.name }}</label>
+                    <span>{{ part.quantity }} EA</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="add-btn" onclick="openAddModal()">+</div>
+
+    <div id="modal" class="modal" onclick="closeModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h3 id="modal-title">장비 등록</h3>
+            <input type="hidden" id="edit-id">
+            <select id="status_input">
+                <option>제작중</option><option>수리중</option><option>대기중</option><option>제작완료</option><option>출고현황</option>
+            </select>
+            <input id="name_input" placeholder="장비 이름">
+            <input id="manager_input" placeholder="담당자">
+            <textarea id="note_input" placeholder="메모" rows="3"></textarea>
+            <button onclick="saveItem()">저장하기</button>
+        </div>
+    </div>
+
+    <script>
+        // 드래그/삭제/모달 함수는 기존 v7과 동일
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+        function allowDrop(ev) { ev.preventDefault(); }
+        function drop(ev) {
+            ev.preventDefault();
+            const id = ev.dataTransfer.getData("text");
+            const newStatus = ev.currentTarget.id;
+            ev.currentTarget.appendChild(document.getElementById(id));
+            fetch("/update_status", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: `id=${id}&status=${encodeURIComponent(newStatus)}` });
+        }
+        function openAddModal() { document.getElementById("modal-title").innerText="신규 등록"; document.getElementById("edit-id").value=""; document.getElementById("modal").style.display="flex"; }
+        function openEditModal(id, n, m, nt, s) { document.getElementById("modal-title").innerText="정보 수정"; document.getElementById("edit-id").value=id; document.getElementById("name_input").value=n; document.getElementById("manager_input").value=m; document.getElementById("note_input").value=nt; document.getElementById("status_input").value=s; document.getElementById("modal").style.display="flex"; }
+        function closeModal(e) { if(e.target.id==="modal") document.getElementById("modal").style.display="none"; }
+        function saveItem() {
+            const id = document.getElementById("edit-id").value;
+            const url = id ? `/update/${id}` : "/add";
+            const data = new URLSearchParams({ status: document.getElementById("status_input").value, name: document.getElementById("name_input").value, manager: document.getElementById("manager_input").value, note: document.getElementById("note_input").value });
+            fetch(url, { method: "POST", body: data }).then(() => location.reload());
+        }
+        function deleteItem(e, id) { e.stopPropagation(); if(confirm("삭제하시겠습니까?")) fetch(`/delete/${id}`, { method: "POST" }).then(() => location.reload()); }
+
+        // --- 재고 수량 수정 기능 ---
+        function editPart(id, name, currentQty) {
+            const newQty = prompt(`[${name}]의 새로운 재고 수량을 입력하세요:`, currentQty);
+            if (newQty !== null && !isNaN(newQty)) {
+                fetch("/update_part", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `id=${id}&quantity=${newQty}`
+                }).then(() => location.reload());
+            }
+        }
+    </script>
+</body>
+</html>
