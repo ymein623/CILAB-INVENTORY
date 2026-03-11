@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
+<!-- saved from url=(0053)https://cilab-inventory-v2026v-institue.onrender.com/ -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <title>CILAB EQUIPMENT INVENTORY</title>
     <style>
         body { background: #0f172a; color: #f8fafc; font-family: sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
@@ -41,32 +41,175 @@
         <h1 class="title">CILAB EQUIPMENT INVENTORY</h1>
 
         <div class="kanban-container">
-            {% for status in ["제작중", "수리중", "대기중", "제작완료", "출고현황"] %}
+            
             <div class="card">
-                <h3>{{ status }}</h3>
-                <div class="card-body" id="{{ status }}" ondragover="allowDrop(event)" ondrop="drop(event)">
-                    {% for item in items if item.status == status %}
-                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="{{ item.id }}" onclick="openEditModal('{{ item.id }}', '{{ item.name }}', '{{ item.manager }}', '{{ item.note }}', '{{ item.status }}')">
-                        <span class="del-btn" onclick="deleteItem(event, '{{ item.id }}')">✕</span>
-                        <strong>{{ item.name }}</strong>
-                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 {{ item.manager }}</small>
-                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">{{ item.note }}</small>
+                <h3>제작중</h3>
+                <div class="card-body" id="제작중" ondragover="allowDrop(event)" ondrop="drop(event)">
+                    
+                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="7" onclick="openEditModal(&#39;7&#39;, &#39;Garda M 002&#39;, &#39;김병우&#39;, &#39;판매용&#39;, &#39;제작중&#39;)">
+                        <span class="del-btn" onclick="deleteItem(event, &#39;7&#39;)">✕</span>
+                        <strong>Garda M 002</strong>
+                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 김병우</small>
+                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">판매용</small>
                     </div>
-                    {% endfor %}
+                    
+                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="11" onclick="openEditModal(&#39;11&#39;, &#39;Garda M2 001 (인증)&#39;, &#39;김서현&#39;, &#39;소나 테스트&#39;, &#39;제작중&#39;)">
+                        <span class="del-btn" onclick="deleteItem(event, &#39;11&#39;)">✕</span>
+                        <strong>Garda M2 001 (인증)</strong>
+                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 김서현</small>
+                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">소나 테스트</small>
+                    </div>
+                    
                 </div>
             </div>
-            {% endfor %}
+            
+            <div class="card">
+                <h3>수리중</h3>
+                <div class="card-body" id="수리중" ondragover="allowDrop(event)" ondrop="drop(event)">
+                    
+                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="8" onclick="openEditModal(&#39;8&#39;, &#39;IWD8_BLACK&#39;, &#39;김병우&#39;, &#39;인천해경 대응용(그만터지라)&#39;, &#39;수리중&#39;)">
+                        <span class="del-btn" onclick="deleteItem(event, &#39;8&#39;)">✕</span>
+                        <strong>IWD8_BLACK</strong>
+                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 김병우</small>
+                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">인천해경 대응용(그만터지라)</small>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>대기중</h3>
+                <div class="card-body" id="대기중" ondragover="allowDrop(event)" ondrop="drop(event)">
+                    
+                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="3" onclick="openEditModal(&#39;3&#39;, &#39;Garda M A&#39;, &#39;변치영&#39;, &#39;v25 &gt; v26&#39;, &#39;대기중&#39;)">
+                        <span class="del-btn" onclick="deleteItem(event, &#39;3&#39;)">✕</span>
+                        <strong>Garda M A</strong>
+                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 변치영</small>
+                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">v25 &gt; v26</small>
+                    </div>
+                    
+                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="4" onclick="openEditModal(&#39;4&#39;, &#39;Garda M B&#39;, &#39;김병우&#39;, &#39;v25 &gt; v26&#39;, &#39;대기중&#39;)">
+                        <span class="del-btn" onclick="deleteItem(event, &#39;4&#39;)">✕</span>
+                        <strong>Garda M B</strong>
+                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 김병우</small>
+                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">v25 &gt; v26</small>
+                    </div>
+                    
+                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="5" onclick="openEditModal(&#39;5&#39;, &#39;Garda M C&#39;, &#39;김서현&#39;, &#39;v25 &gt; v26&#39;, &#39;대기중&#39;)">
+                        <span class="del-btn" onclick="deleteItem(event, &#39;5&#39;)">✕</span>
+                        <strong>Garda M C</strong>
+                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 김서현</small>
+                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">v25 &gt; v26</small>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>제작완료</h3>
+                <div class="card-body" id="제작완료" ondragover="allowDrop(event)" ondrop="drop(event)">
+                    
+                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="2" onclick="openEditModal(&#39;2&#39;, &#39;Garda M 000&#39;, &#39;변치영&#39;, &#39;싱가포르 (SMPS)&#39;, &#39;제작완료&#39;)">
+                        <span class="del-btn" onclick="deleteItem(event, &#39;2&#39;)">✕</span>
+                        <strong>Garda M 000</strong>
+                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 변치영</small>
+                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">싱가포르 (SMPS)</small>
+                    </div>
+                    
+                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="6" onclick="openEditModal(&#39;6&#39;, &#39;Garda M2 002&#39;, &#39;변치영&#39;, &#39;콘솔 + 200m Reel (new)&#39;, &#39;제작완료&#39;)">
+                        <span class="del-btn" onclick="deleteItem(event, &#39;6&#39;)">✕</span>
+                        <strong>Garda M2 002</strong>
+                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 변치영</small>
+                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">콘솔 + 200m Reel (new)</small>
+                    </div>
+                    
+                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="9" onclick="openEditModal(&#39;9&#39;, &#39;IWD8_BLUE&#39;, &#39;김병우&#39;, &#39;인천해경 대응용&#39;, &#39;제작완료&#39;)">
+                        <span class="del-btn" onclick="deleteItem(event, &#39;9&#39;)">✕</span>
+                        <strong>IWD8_BLUE</strong>
+                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 김병우</small>
+                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">인천해경 대응용</small>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>출고현황</h3>
+                <div class="card-body" id="출고현황" ondragover="allowDrop(event)" ondrop="drop(event)">
+                    
+                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="1" onclick="openEditModal(&#39;1&#39;, &#39;Garda M 001&#39;, &#39;변치영&#39;, &#39;수자원공사 (26.03.09)&#39;, &#39;출고현황&#39;)">
+                        <span class="del-btn" onclick="deleteItem(event, &#39;1&#39;)">✕</span>
+                        <strong>Garda M 001</strong>
+                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 변치영</small>
+                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">수자원공사 (26.03.09)</small>
+                    </div>
+                    
+                    <div class="item-card" draggable="true" ondragstart="drag(event)" id="10" onclick="openEditModal(&#39;10&#39;, &#39;Garda M2 003&#39;, &#39;변치영, 김서현&#39;, &#39;말레이시아(SMPS,콘솔,어뢰,그리퍼)&#39;, &#39;출고현황&#39;)">
+                        <span class="del-btn" onclick="deleteItem(event, &#39;10&#39;)">✕</span>
+                        <strong>Garda M2 003</strong>
+                        <small style="display:block; margin-top:5px; color:#cbd5e1;">👤 변치영, 김서현</small>
+                        <small style="display:block; color: #94a3b8; font-size: 0.8rem; margin-top:5px;">말레이시아(SMPS,콘솔,어뢰,그리퍼)</small>
+                    </div>
+                    
+                </div>
+            </div>
+            
         </div>
 
         <div class="inventory-section">
             <h4>📦 AS 재고 현황 (클릭 시 수량 수정)</h4>
             <div class="inventory-bar">
-                {% for part in parts %}
-                <div class="inventory-item" onclick="editPart('{{ part.id }}', '{{ part.name }}', '{{ part.quantity }}')">
-                    <label>{{ part.name }}</label>
-                    <span>{{ part.quantity }} EA</span>
+                
+                <div class="inventory-item" onclick="editPart(&#39;1&#39;, &#39;모터 좌측 세트&#39;, &#39;1&#39;)">
+                    <label>모터 좌측 세트</label>
+                    <span>1 EA</span>
                 </div>
-                {% endfor %}
+                
+                <div class="inventory-item" onclick="editPart(&#39;2&#39;, &#39;모터 우측 세트&#39;, &#39;0&#39;)">
+                    <label>모터 우측 세트</label>
+                    <span>0 EA</span>
+                </div>
+                
+                <div class="inventory-item" onclick="editPart(&#39;3&#39;, &#39;조명 세트&#39;, &#39;0&#39;)">
+                    <label>조명 세트</label>
+                    <span>0 EA</span>
+                </div>
+                
+                <div class="inventory-item" onclick="editPart(&#39;4&#39;, &#39;ESC 우측 세트&#39;, &#39;6&#39;)">
+                    <label>ESC 우측 세트</label>
+                    <span>6 EA</span>
+                </div>
+                
+                <div class="inventory-item" onclick="editPart(&#39;5&#39;, &#39;ESC 좌측 세트&#39;, &#39;5&#39;)">
+                    <label>ESC 좌측 세트</label>
+                    <span>5 EA</span>
+                </div>
+                
+                <div class="inventory-item" onclick="editPart(&#39;6&#39;, &#39;CT200&#39;, &#39;18&#39;)">
+                    <label>CT200</label>
+                    <span>18 EA</span>
+                </div>
+                
+                <div class="inventory-item" onclick="editPart(&#39;7&#39;, &#39;CTM300&#39;, &#39;3&#39;)">
+                    <label>CTM300</label>
+                    <span>3 EA</span>
+                </div>
+                
+                <div class="inventory-item" onclick="editPart(&#39;8&#39;, &#39;그리퍼&#39;, &#39;2&#39;)">
+                    <label>그리퍼</label>
+                    <span>2 EA</span>
+                </div>
+                
+                <div class="inventory-item" onclick="editPart(&#39;9&#39;, &#39;어뢰&#39;, &#39;6&#39;)">
+                    <label>어뢰</label>
+                    <span>6 EA</span>
+                </div>
+                
+                <div class="inventory-item" onclick="editPart(&#39;10&#39;, &#39;예비 항목&#39;, &#39;0&#39;)">
+                    <label>예비 항목</label>
+                    <span>0 EA</span>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -121,5 +264,5 @@
             }
         }
     </script>
-</body>
-</html>
+
+</body></html>
