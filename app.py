@@ -1,16 +1,17 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 
 app = Flask(__name__)
 
-# DB 설정
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'inventory.db')
+# --- [중요] DB 연결 설정 ---
+# Render 환경 변수에서 URL을 가져오거나, 직접 복사한 External URL을 넣으세요.
+# 예: postgresql://user:password@hostname/dbname
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '여기에_복사한_External_URL을_넣으세요')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# 모델 정의
+# 모델 정의 (기존과 동일)
 class Equipment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(20), nullable=False)
@@ -25,22 +26,19 @@ class Part(db.Model):
 
 with app.app_context():
     db.create_all()
-    # 재고 항목을 10개로 업데이트 (항목 수정 및 추가)
-    parts_data = [
-        ("모터 좌측 세트", 10), ("모터 우측 세트", 10), ("조명 세트", 10),
-        ("ESC 우측 세트", 1), ("ESC 좌측 세트", 1), 
-        ("CT200", 5), ("CTM300", 3), ("그리퍼", 2), 
-        ("어뢰", 4), ("예비 항목", 0) # 10개를 맞추기 위한 예비 항목
-    ]
-    
-    # 기존 데이터가 있어도 10개를 강제로 맞추기 위한 로직
+    # 10개 재고 항목 초기화
     if Part.query.count() < 10:
-        Part.query.delete() # 기존 5개 데이터를 지우고 새로 생성
+        parts_data = [
+            ("모터 좌측 세트", 10), ("모터 우측 세트", 10), ("조명 세트", 10),
+            ("ESC 우측 세트", 1), ("ESC 좌측 세트", 1), 
+            ("CT200", 5), ("CTM300", 3), ("그리퍼", 2), 
+            ("어뢰", 4), ("연구소 소모품", 0)
+        ]
         for name, qty in parts_data:
             db.session.add(Part(name=name, quantity=qty))
         db.session.commit()
 
-# ... (나머지 API 동일) ...
+# ... (나머지 라우트 함수 @app.route 등은 기존 v8.2와 동일하게 유지) ...
 
 @app.route('/')
 def dashboard():
