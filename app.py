@@ -4,14 +4,13 @@ import os
 
 app = Flask(__name__)
 
-# --- [중요] DB 연결 설정 ---
-# Render 환경 변수에서 URL을 가져오거나, 직접 복사한 External URL을 넣으세요.
-# 예: postgresql://user:password@hostname/dbname
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '여기에_복사한_External_URL을_넣으세요')
+# [중요] 기존 SQLite 설정을 지우고 아래와 같이 변경합니다.
+# Render의 환경변수 DATABASE_URL을 사용하거나, 직접 주소를 입력합니다.
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '여기에_복사한_External_URL_붙여넣기')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# 모델 정의 (기존과 동일)
+# --- 장비 및 재고 모델 (기존과 동일) ---
 class Equipment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(20), nullable=False)
@@ -24,9 +23,9 @@ class Part(db.Model):
     name = db.Column(db.String(50), nullable=False)
     quantity = db.Column(db.Integer, default=0)
 
+# DB 테이블 생성 및 초기화
 with app.app_context():
     db.create_all()
-    # 10개 재고 항목 초기화
     if Part.query.count() < 10:
         parts_data = [
             ("모터 좌측 세트", 10), ("모터 우측 세트", 10), ("조명 세트", 10),
@@ -38,7 +37,8 @@ with app.app_context():
             db.session.add(Part(name=name, quantity=qty))
         db.session.commit()
 
-# ... (나머지 라우트 함수 @app.route 등은 기존 v8.2와 동일하게 유지) ...
+# --- 라우팅 함수들 (기존 v8.2 로직 유지) ---
+# @app.route('/') ... @app.route('/add') ... 등등
 
 @app.route('/')
 def dashboard():
