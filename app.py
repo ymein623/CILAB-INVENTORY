@@ -28,10 +28,10 @@ with app.app_context():
     db.create_all()
     if Part.query.count() < 10:
         parts_data = [
-            ("모터 좌측 세트", 10), ("모터 우측 세트", 10), ("조명 세트", 10),
-            ("ESC 우측 세트", 1), ("ESC 좌측 세트", 1), 
-            ("CT200", 5), ("CTM300", 3), ("그리퍼", 2), 
-            ("어뢰", 4), ("연구소 소모품", 0)
+            ("모터 좌측 세트", 1), ("모터 우측 세트", 0), ("조명 세트", 0),
+            ("ESC 우측 세트", 6), ("ESC 좌측 세트", 5), 
+            ("CT200", 18), ("CTM300", 3), ("그리퍼", 2), 
+            ("어뢰", 6), ("연구소 소모품", 0)
         ]
         for name, qty in parts_data:
             db.session.add(Part(name=name, quantity=qty))
